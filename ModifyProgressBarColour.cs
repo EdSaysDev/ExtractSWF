@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Licensed under CC-BY-SA 4.0. From https://stackoverflow.com/a/9753302/ by https://stackoverflow.com/users/1032613/user1032613
+
+using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 

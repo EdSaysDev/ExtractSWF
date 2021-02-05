@@ -37,6 +37,10 @@
             this.folderLbl = new System.Windows.Forms.Label();
             this.clearListBtn = new System.Windows.Forms.Button();
             this.aboutBtn = new System.Windows.Forms.Button();
+            this.flashFileProgressBar = new System.Windows.Forms.ProgressBar();
+            this.fileProgressBar = new System.Windows.Forms.ProgressBar();
+            this.fileNumLbl = new System.Windows.Forms.Label();
+            this.flashNumLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // exportBtn
@@ -116,11 +120,47 @@
             this.aboutBtn.UseVisualStyleBackColor = true;
             this.aboutBtn.Click += new System.EventHandler(this.aboutBtn_Click);
             // 
+            // flashFileProgressBar
+            // 
+            this.flashFileProgressBar.Location = new System.Drawing.Point(80, 383);
+            this.flashFileProgressBar.Name = "flashFileProgressBar";
+            this.flashFileProgressBar.Size = new System.Drawing.Size(542, 26);
+            this.flashFileProgressBar.TabIndex = 12;
+            // 
+            // fileProgressBar
+            // 
+            this.fileProgressBar.Location = new System.Drawing.Point(80, 351);
+            this.fileProgressBar.Name = "fileProgressBar";
+            this.fileProgressBar.Size = new System.Drawing.Size(542, 26);
+            this.fileProgressBar.TabIndex = 13;
+            // 
+            // fileNumLbl
+            // 
+            this.fileNumLbl.AutoSize = true;
+            this.fileNumLbl.Location = new System.Drawing.Point(12, 351);
+            this.fileNumLbl.Name = "fileNumLbl";
+            this.fileNumLbl.Size = new System.Drawing.Size(30, 13);
+            this.fileNumLbl.TabIndex = 14;
+            this.fileNumLbl.Text = "(n/a)";
+            // 
+            // flashNumLbl
+            // 
+            this.flashNumLbl.AutoSize = true;
+            this.flashNumLbl.Location = new System.Drawing.Point(12, 383);
+            this.flashNumLbl.Name = "flashNumLbl";
+            this.flashNumLbl.Size = new System.Drawing.Size(30, 13);
+            this.flashNumLbl.TabIndex = 15;
+            this.flashNumLbl.Text = "(n/a)";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(634, 344);
+            this.ClientSize = new System.Drawing.Size(634, 421);
+            this.Controls.Add(this.flashNumLbl);
+            this.Controls.Add(this.fileNumLbl);
+            this.Controls.Add(this.fileProgressBar);
+            this.Controls.Add(this.flashFileProgressBar);
             this.Controls.Add(this.aboutBtn);
             this.Controls.Add(this.clearListBtn);
             this.Controls.Add(this.folderLbl);
@@ -134,6 +174,7 @@
             this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "Extract SWF";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -148,6 +189,10 @@
         private System.Windows.Forms.Label folderLbl;
         private System.Windows.Forms.Button clearListBtn;
         private System.Windows.Forms.Button aboutBtn;
+        private System.Windows.Forms.ProgressBar flashFileProgressBar;
+        private System.Windows.Forms.ProgressBar fileProgressBar;
+        private System.Windows.Forms.Label fileNumLbl;
+        private System.Windows.Forms.Label flashNumLbl;
     }
 }
 

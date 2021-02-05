@@ -34,13 +34,13 @@
             this.dragPanel = new System.Windows.Forms.Panel();
             this.dragLabel = new System.Windows.Forms.Label();
             this.fileList = new System.Windows.Forms.ListBox();
-            this.folderLbl = new System.Windows.Forms.Label();
             this.clearListBtn = new System.Windows.Forms.Button();
             this.aboutBtn = new System.Windows.Forms.Button();
             this.flashFileProgressBar = new System.Windows.Forms.ProgressBar();
             this.fileProgressBar = new System.Windows.Forms.ProgressBar();
             this.fileNumLbl = new System.Windows.Forms.Label();
             this.flashNumLbl = new System.Windows.Forms.Label();
+            this.folderLbl = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // exportBtn
@@ -86,19 +86,11 @@
             // fileList
             // 
             this.fileList.FormattingEnabled = true;
-            this.fileList.Location = new System.Drawing.Point(349, 50);
+            this.fileList.HorizontalScrollbar = true;
+            this.fileList.Location = new System.Drawing.Point(349, 63);
             this.fileList.Name = "fileList";
-            this.fileList.Size = new System.Drawing.Size(273, 251);
+            this.fileList.Size = new System.Drawing.Size(273, 238);
             this.fileList.TabIndex = 8;
-            // 
-            // folderLbl
-            // 
-            this.folderLbl.AutoSize = true;
-            this.folderLbl.Location = new System.Drawing.Point(350, 25);
-            this.folderLbl.Name = "folderLbl";
-            this.folderLbl.Size = new System.Drawing.Size(97, 13);
-            this.folderLbl.TabIndex = 9;
-            this.folderLbl.Text = "(no folder selected)";
             // 
             // clearListBtn
             // 
@@ -152,18 +144,31 @@
             this.flashNumLbl.TabIndex = 15;
             this.flashNumLbl.Text = "(n/a)";
             // 
+            // folderLbl
+            // 
+            this.folderLbl.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.folderLbl.Location = new System.Drawing.Point(349, 25);
+            this.folderLbl.Multiline = true;
+            this.folderLbl.Name = "folderLbl";
+            this.folderLbl.ReadOnly = true;
+            this.folderLbl.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.folderLbl.Size = new System.Drawing.Size(273, 32);
+            this.folderLbl.TabIndex = 16;
+            this.folderLbl.Text = "(no folder selected)";
+            this.folderLbl.WordWrap = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 421);
+            this.Controls.Add(this.folderLbl);
             this.Controls.Add(this.flashNumLbl);
             this.Controls.Add(this.fileNumLbl);
             this.Controls.Add(this.fileProgressBar);
             this.Controls.Add(this.flashFileProgressBar);
             this.Controls.Add(this.aboutBtn);
             this.Controls.Add(this.clearListBtn);
-            this.Controls.Add(this.folderLbl);
             this.Controls.Add(this.fileList);
             this.Controls.Add(this.dragLabel);
             this.Controls.Add(this.dragPanel);
@@ -186,13 +191,13 @@
         private System.Windows.Forms.Panel dragPanel;
         private System.Windows.Forms.Label dragLabel;
         private System.Windows.Forms.ListBox fileList;
-        private System.Windows.Forms.Label folderLbl;
         private System.Windows.Forms.Button clearListBtn;
         private System.Windows.Forms.Button aboutBtn;
         private System.Windows.Forms.ProgressBar flashFileProgressBar;
         private System.Windows.Forms.ProgressBar fileProgressBar;
         private System.Windows.Forms.Label fileNumLbl;
         private System.Windows.Forms.Label flashNumLbl;
+        private System.Windows.Forms.TextBox folderLbl;
     }
 }
 

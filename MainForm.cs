@@ -7,11 +7,13 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using ProgressBarControlUtils;
+using System.Threading;
 
 namespace ExtractSWF
 {
@@ -21,10 +23,23 @@ namespace ExtractSWF
         string folderName=null;
         string tmpFolder;
 
-        TaskbarManager windowsTaskbar = TaskbarManager.Instance;
+        Thread exportThread;
 
         public MainForm()
         {
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                string resourceName = new AssemblyName(args.Name).Name + ".dll";
+                string resource = Array.Find(this.GetType().Assembly.GetManifestResourceNames(), element => element.EndsWith(resourceName));
+
+                using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource))
+                {
+                    byte[] assemblyData = new byte[stream.Length];
+                    stream.Read(assemblyData, 0, assemblyData.Length);
+                    return Assembly.Load(assemblyData);
+                }
+            };
+
             InitializeComponent();
 
             tmpFolder = Path.GetTempPath();
@@ -54,16 +69,33 @@ namespace ExtractSWF
 
         private void exportBtn_Click(object sender, EventArgs e)
         {
+            if (exportThread != null) {
+                if (exportThread.ThreadState == ThreadState.Running)
+                {
+                    {
+                        MessageBox.Show("You must wait for the previous export to finish first", "Have some patience", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                }
+            }
+
             if (pptFilenames.Count == 0)
             {
                 MessageBox.Show("You must select at least one PowerPoint Presentation first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
             if (folderName == null)
             {
                 MessageBox.Show("You must select an output folder first", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            exportThread = new Thread(() => { runExport(); });
+            exportThread.Start();
+
+        }
+        void runExport() {
 
             int errors = 0;
             bool aborted = false;
@@ -188,10 +220,12 @@ namespace ExtractSWF
                     if (flashFileCount == 0)
                     {
                         updateProgressBars(TaskbarProgressBarState.Paused);
+
+                        // allow application to redraw
+                        Application.DoEvents();
+
                         MessageBox.Show("No flash files found in '" + Path.GetFileName(currentPPTFilename) + "'.", "No Flash Files", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
-
-                    Application.DoEvents();
 
                     break;
                 }
@@ -214,12 +248,23 @@ namespace ExtractSWF
 
             if (aborted)
             {
+                // allow application to redraw
+                Application.DoEvents();
+
                 MessageBox.Show("Extraction failed with " + error, "Extraction Failed", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 updateProgressBars(TaskbarProgressBarState.Error);
                 return;
             }
 
-            updateProgressBars(TaskbarProgressBarState.Normal, pptFilenames.Count, binFilesCount, pptFilenames.Count, binFilesTotal);
+            if (binFilesTotal == 0)
+            {
+                binFilesTotal = 1;
+            }
+            updateProgressBars(TaskbarProgressBarState.Normal, pptFilenames.Count, binFilesTotal, pptFilenames.Count, binFilesTotal);
+            updateProgressBars(TaskbarProgressBarState.NoProgress, false);
+
+            // allow application to redraw
+            Application.DoEvents();
 
             if (errors > 0)
             {
@@ -318,57 +363,81 @@ namespace ExtractSWF
             System.Diagnostics.Process.Start("explorer.exe", folderName);
         }
 
-        void updateProgressBars(TaskbarProgressBarState state)
+        void updateProgressBars(TaskbarProgressBarState state, bool updateFormPBars = true)
         {
-            // update progress bars and task bar states
-            ProgressBarState pBarState = ProgressBarState.Normal;
-            if (state == TaskbarProgressBarState.Error)
+            if (InvokeRequired)
             {
-                pBarState = ProgressBarState.Error;
+                BeginInvoke(new MethodInvoker (() => { updateProgressBars(state, updateFormPBars); }));
             }
-            else if (state == TaskbarProgressBarState.Paused)
+            else
             {
-                pBarState = ProgressBarState.Paused;
-            }
-            else if (state == TaskbarProgressBarState.NoProgress)
-            {
-                flashFileProgressBar.Value = 0;
-                fileProgressBar.Value = 0;
-            }
+                TaskbarManager windowsTaskbar = TaskbarManager.Instance;
+                windowsTaskbar.SetProgressState(state);
 
-            windowsTaskbar.SetProgressState(state);
-            ModifyProgressBarColour.SetState(flashFileProgressBar, pBarState);
-            ModifyProgressBarColour.SetState(fileProgressBar, pBarState);
+                if (updateFormPBars)
+                {
+                    // update progress bars and task bar states
+                    ProgressBarState pBarState = ProgressBarState.Normal;
+                    if (state == TaskbarProgressBarState.Error)
+                    {
+                        pBarState = ProgressBarState.Error;
+                    }
+                    else if (state == TaskbarProgressBarState.Paused)
+                    {
+                        pBarState = ProgressBarState.Paused;
+                    }
+                    else if (state == TaskbarProgressBarState.NoProgress)
+                    {
+                        flashFileProgressBar.Value = 0;
+                        fileProgressBar.Value = 0;
+                    }
 
-            Application.DoEvents();
+                    ModifyProgressBarColour.SetState(flashFileProgressBar, pBarState);
+                    ModifyProgressBarColour.SetState(fileProgressBar, pBarState);
+                }
+
+                Invalidate();
+            }
         }
 
         void updateProgressBars(TaskbarProgressBarState state, int fileNum, int flashNum, int fileMax, int flashMax)
         {
-            // check the values are in an acceptable range
-            fileMax = Math.Max(fileMax, 1);
-            fileNum = Math.Min(Math.Max(fileNum, 0), fileMax);
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(() => { updateProgressBars(state, fileNum, flashNum, fileMax, flashMax); }));
+            }
+            else
+            {
+                TaskbarManager windowsTaskbar = TaskbarManager.Instance;
 
-            flashMax = Math.Max(flashMax, 1);
-            flashNum = Math.Min(Math.Max(flashNum, 0), flashMax);
+                // check the values are in an acceptable range
+                fileMax = Math.Max(fileMax, 1);
+                fileNum = Math.Min(Math.Max(fileNum, 0), fileMax);
 
-            // update text boxes
-            fileNumLbl.Text = "File " + fileNum + "/" + fileMax;
-            flashNumLbl.Text = "Flash file " + flashNum + "/" + flashMax;
+                flashMax = Math.Max(flashMax, 1);
+                flashNum = Math.Min(Math.Max(flashNum, 0), flashMax);
 
-            updateProgressBars(state);
+                // update text boxes
+                fileNumLbl.Text = "File " + fileNum + "/" + fileMax;
+                flashNumLbl.Text = "Flash file " + flashNum + "/" + flashMax;
 
-            // update values
-            windowsTaskbar.SetProgressValue(fileNum, fileMax);
+                updateProgressBars(state);
 
-            flashFileProgressBar.Maximum = flashMax;
-            flashFileProgressBar.Value = flashNum;
+                // update values
+                windowsTaskbar.SetProgressValue(fileNum, fileMax);
 
-            fileProgressBar.Maximum = fileMax;
-            fileProgressBar.Value = fileNum;
+                flashFileProgressBar.Maximum = flashMax;
+                flashFileProgressBar.Value = flashNum;
 
-            // respond to events so changes are drawn
-            Application.DoEvents();
+                fileProgressBar.Maximum = fileMax;
+                fileProgressBar.Value = fileNum;
+
+                // force repaint
+                Invalidate();
+
+                // respond to events so changes are drawn
+                //Application.DoEvents();
+            }
         }
 
         private void aboutBtn_Click(object sender, EventArgs e)

@@ -16,10 +16,3 @@ D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\obj\Debug\en-GB\Extra
 D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\obj\Debug\ExtractSWF.TrustInfo.xml
 D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\obj\Debug\ExtractSWF.exe.manifest
 D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\obj\Debug\ExtractSWF.application
-D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\bin\Debug\Microsoft.WindowsAPICodePack.Shell.dll
-D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\bin\Debug\Microsoft.WindowsAPICodePack.dll
-D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\bin\Debug\Microsoft.WindowsAPICodePack.Shell.pdb
-D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\bin\Debug\Microsoft.WindowsAPICodePack.Shell.xml
-D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\bin\Debug\Microsoft.WindowsAPICodePack.pdb
-D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\bin\Debug\Microsoft.WindowsAPICodePack.xml
-D:\Users\Edward\Documents\Edward\Programming\CS\ExtractSWF\obj\Debug\ExtractSWF.csproj.CopyComplete

@@ -7,14 +7,14 @@
     <framework targetVersion="4.7.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="ExtractSWF.exe.manifest" size="7495">
+    <dependentAssembly dependencyType="install" codebase="ExtractSWF.exe.manifest" size="6134">
       <assemblyIdentity name="ExtractSWF.exe" version="1.0.0.1" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>n8LsTH2GAdtsddmS2K9sp3Kgu199CuLWEPXOCKohPOw=</dsig:DigestValue>
+        <dsig:DigestValue>tx6v4IGYrzJUvnZKgnEF20n52Kw/V6NQJ+4V6bceuOo=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

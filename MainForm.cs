@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) Edward Lancaster 2021. Licensed under the MIT License.
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -442,7 +444,7 @@ namespace ExtractSWF
 
         private void aboutBtn_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("This application was developed by Edward Lancaster.\n\nCopyright © Edward Lancaster 2021, All Rights Reserved.", "About ExtractSWF", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("This application was developed by Edward Lancaster.\n\nCopyright © Edward Lancaster 2021, licensed under the MIT License\nFor more information, visit https://github.com/TheLanc/ExtractSWF", "About ExtractSWF", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
